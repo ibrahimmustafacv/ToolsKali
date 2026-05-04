@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CyberArsenal — مكتبة أدوات اختبار الاختراق | إصدار البروفيسور</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-deep:#030b0f;--bg-card:#071520;--bg-glass:rgba(0,255,170,0.04);
+  --neon-green:#00ffaa;--neon-cyan:#00e5ff;--neon-red:#ff3860;
+  --neon-orange:#ff9900;--neon-purple:#bf5fff;--neon-pink:#ff007f;
+  --text-main:#c8e6ff;--text-dim:#5a7a8a;
+  --border:rgba(0,255,170,0.15);
+  --glow-green:0 0 20px rgba(0,255,170,0.4);
+  --glow-cyan:0 0 20px rgba(0,229,255,0.4);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg-deep);font-family:'Cairo',sans-serif;color:var(--text-main);overflow-x:hidden;min-height:100vh;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,255,170,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,170,0.03) 1px,transparent 1px);background-size:50px 50px;z-index:0;pointer-events:none;}
+body::after{content:'';position:fixed;top:0;left:0;right:0;height:320px;background:radial-gradient(ellipse at 50% 0%,rgba(0,229,255,0.08) 0%,transparent 70%);z-index:0;pointer-events:none;}
+.container{position:relative;z-index:1;max-width:1300px;margin:0 auto;padding:0 24px;}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(3,11,15,0.94);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);padding:14px 0;}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;max-width:1300px;margin:0 auto;padding:0 24px;}
+.logo{display:flex;align-items:center;gap:10px;font-family:'Share Tech Mono',monospace;font-size:1.2rem;color:var(--neon-green);text-shadow:var(--glow-green);letter-spacing:2px;}
+.logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--neon-green),var(--neon-cyan));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;box-shadow:var(--glow-green);}
+.nav-pills{display:flex;gap:8px;}
+.nav-pill{padding:6px 16px;border:1px solid var(--border);border-radius:100px;font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:var(--text-dim);cursor:pointer;background:transparent;transition:all .3s;}
+.nav-pill:hover,.nav-pill.active{background:var(--neon-green);color:#030b0f;border-color:var(--neon-green);}
+.nav-pill[data-s="online"].active{background:var(--neon-cyan);border-color:var(--neon-cyan);}
+
+/* HERO */
+.hero{padding:72px 0 52px;text-align:center;}
+.hero-badge{display:inline-block;padding:6px 20px;border:1px solid var(--border);border-radius:100px;font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--neon-green);letter-spacing:3px;margin-bottom:22px;background:var(--bg-glass);animation:pulseBorder 2s ease infinite;}
+@keyframes pulseBorder{0%,100%{border-color:rgba(0,255,170,0.15)}50%{border-color:rgba(0,255,170,0.55)}}
+.hero h1{font-size:clamp(2rem,5.5vw,4rem);font-weight:900;line-height:1.1;margin-bottom:14px;}
+.hero h1 .gr{background:linear-gradient(90deg,var(--neon-green),var(--neon-cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 18px rgba(0,255,170,0.4));}
+.hero p{font-size:1rem;color:var(--text-dim);max-width:500px;margin:0 auto 36px;line-height:1.8;}
+
+/* TERMINAL */
+.terminal{max-width:590px;margin:0 auto 56px;background:rgba(0,0,0,0.78);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 0 40px rgba(0,255,170,0.07);}
+.t-bar{display:flex;align-items:center;gap:8px;padding:10px 16px;background:rgba(255,255,255,0.04);border-bottom:1px solid var(--border);}
+.dot{width:11px;height:11px;border-radius:50%;}
+.dot-r{background:#ff3860}.dot-y{background:#ff9900}.dot-g{background:#00ffaa}
+.t-title{font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:var(--text-dim);margin-right:auto;}
+.t-body{padding:18px 20px;font-family:'Share Tech Mono',monospace;font-size:0.82rem;line-height:2.1;text-align:left;direction:ltr;}
+.t-pr{color:#00ffaa}.t-cm{color:#00e5ff}.t-ou{color:#5a7a8a}
+.cursor{display:inline-block;width:8px;height:15px;background:#00ffaa;animation:blink 1s step-end infinite;vertical-align:middle;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* STATS */
+.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:44px;}
+.stat-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:18px;text-align:center;transition:all .3s;}
+.stat-card:hover{border-color:var(--neon-green);box-shadow:var(--glow-green);}
+.stat-num{font-size:1.9rem;font-weight:900;font-family:'Rajdhani',sans-serif;background:linear-gradient(135deg,var(--neon-green),var(--neon-cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.stat-label{font-size:0.77rem;color:var(--text-dim);margin-top:3px;}
+
+/* SEARCH */
+.search-section{margin-bottom:40px;}
+.search-wrapper{position:relative;margin-bottom:22px;}
+.search-ico{position:absolute;right:16px;top:50%;transform:translateY(-50%);color:var(--text-dim);}
+.search-input{width:100%;padding:13px 46px 13px 18px;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;color:var(--text-main);font-family:'Cairo',sans-serif;font-size:0.93rem;outline:none;transition:all .3s;}
+.search-input:focus{border-color:var(--neon-green);box-shadow:0 0 0 3px rgba(0,255,170,0.08);}
+.search-input::placeholder{color:var(--text-dim);}
+.filters{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;}
+.filter-btn{padding:7px 18px;border:1px solid var(--border);border-radius:100px;background:transparent;color:var(--text-dim);font-family:'Cairo',sans-serif;font-size:0.82rem;cursor:pointer;transition:all .3s;display:flex;align-items:center;gap:5px;}
+.filter-btn:hover,.filter-btn.active{color:#030b0f;border-color:transparent;transform:translateY(-2px);}
+.filter-btn[data-cat="all"].active{background:linear-gradient(135deg,var(--neon-green),var(--neon-cyan));}
+.filter-btn[data-cat="wordlist"].active{background:linear-gradient(135deg,#bf5fff,#6600ff);}
+.filter-btn[data-cat="server"].active{background:linear-gradient(135deg,#ff9900,#ff6600);}
+.filter-btn[data-cat="metadata"].active{background:linear-gradient(135deg,#00e5ff,#0080ff);}
+.filter-btn[data-cat="cracking"].active{background:linear-gradient(135deg,#ff3860,#bf00ff);}
+.filter-btn[data-cat="phishing"].active{background:linear-gradient(135deg,#ff007f,#a00050);}
+.filter-btn[data-cat="android"].active{background:linear-gradient(135deg,#44ff44,#00aa44);}
+.filter-btn[data-cat="online"].active{background:linear-gradient(135deg,#00ffcc,#00bfff);}
+
+/* SECTION TITLE */
+.sec-title{display:flex;align-items:center;gap:14px;margin-bottom:26px;margin-top:52px;}
+.sec-title h2{font-size:1.3rem;font-weight:700;color:white;white-space:nowrap;}
+.sec-line{flex:1;height:1px;background:var(--border);}
+.sec-badge{padding:4px 14px;border-radius:100px;font-family:'Share Tech Mono',monospace;font-size:0.67rem;letter-spacing:1px;white-space:nowrap;}
+
+/* TOOLS GRID */
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(355px,1fr));gap:20px;margin-bottom:24px;}
+
+/* CARD */
+.tool-card{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:24px;transition:all .4s cubic-bezier(.23,1,.32,1);position:relative;overflow:hidden;animation:fadeUp .5s ease forwards;opacity:0;transform:translateY(18px);}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+.tool-card:hover{border-color:var(--ca,var(--neon-green));transform:translateY(-5px) scale(1.008);box-shadow:0 20px 55px rgba(0,0,0,0.5),0 0 28px var(--cs,rgba(0,255,170,0.12));}
+.card-header{display:flex;align-items:flex-start;gap:14px;margin-bottom:14px;}
+.tool-icon{width:50px;height:50px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;}
+.tool-name{font-size:1.15rem;font-weight:700;color:white;margin-bottom:4px;font-family:'Rajdhani',sans-serif;letter-spacing:1px;}
+.tool-cat{display:inline-block;padding:3px 10px;border-radius:100px;font-size:0.67rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;font-family:'Share Tech Mono',monospace;}
+.tool-desc{font-size:0.86rem;color:var(--text-dim);line-height:1.75;margin-bottom:16px;}
+
+/* STEPS */
+.steps-lbl{font-size:0.68rem;font-family:'Share Tech Mono',monospace;color:var(--text-dim);letter-spacing:2px;margin-bottom:10px;text-transform:uppercase;}
+.steps-list{display:flex;flex-direction:column;gap:7px;}
+.step-item{display:flex;gap:10px;align-items:flex-start;background:rgba(0,0,0,0.42);border:1px solid rgba(255,255,255,0.05);border-radius:9px;padding:9px 12px;transition:all .3s;cursor:pointer;position:relative;}
+.step-item:hover{border-color:rgba(0,229,255,0.28);background:rgba(0,229,255,0.04);}
+.step-num{font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:var(--ca,var(--neon-green));background:rgba(0,255,170,0.07);border:1px solid var(--border);border-radius:5px;padding:2px 7px;flex-shrink:0;margin-top:2px;}
+.step-cmd{font-family:'Share Tech Mono',monospace;font-size:0.76rem;color:var(--neon-cyan);direction:ltr;text-align:left;display:block;}
+.step-note{font-size:0.69rem;color:var(--text-dim);margin-top:3px;direction:rtl;font-family:'Cairo',sans-serif;display:block;}
+.copy-ico{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:0.68rem;color:var(--text-dim);opacity:0;transition:opacity .3s;}
+.step-item:hover .copy-ico{opacity:1;}
+
+.step-item.input-step{border-color:rgba(255,221,0,0.15);}
+.step-item.input-step .step-cmd{color:#ffdd00;}
+
+.card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding-top:13px;border-top:1px solid rgba(255,255,255,0.05);}
+.difficulty{display:flex;gap:4px;align-items:center;font-size:0.69rem;color:var(--text-dim);font-family:'Share Tech Mono',monospace;}
+.diff-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.1);}
+.diff-dot.active{background:var(--ca,var(--neon-green));}
+.platform-badges{display:flex;gap:5px;}
+.platform-badge{padding:3px 8px;border-radius:4px;font-size:0.62rem;font-family:'Share Tech Mono',monospace;background:rgba(255,255,255,0.05);color:var(--text-dim);border:1px solid rgba(255,255,255,0.07);}
+
+/* ONLINE GRID */
+.online-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px;margin-bottom:70px;}
+.online-card{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:20px;transition:all .4s cubic-bezier(.23,1,.32,1);animation:fadeUp .5s ease forwards;opacity:0;transform:translateY(18px);cursor:pointer;}
+.online-card:hover{transform:translateY(-5px) scale(1.01);border-color:var(--oa,var(--neon-cyan));box-shadow:0 16px 50px rgba(0,0,0,0.4),0 0 25px var(--og,rgba(0,229,255,0.12));}
+.oc-header{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.oc-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;}
+.oc-name{font-size:1.05rem;font-weight:700;color:white;font-family:'Rajdhani',sans-serif;letter-spacing:1px;}
+.oc-url{font-size:0.63rem;font-family:'Share Tech Mono',monospace;margin-top:2px;}
+.oc-desc{font-size:0.83rem;color:var(--text-dim);line-height:1.72;margin-bottom:14px;}
+.oc-footer{display:flex;align-items:center;justify-content:space-between;}
+.oc-tag{display:inline-block;padding:4px 12px;border-radius:100px;font-size:0.67rem;font-family:'Share Tech Mono',monospace;font-weight:600;letter-spacing:1px;}
+.oc-arrow{font-size:1rem;color:var(--text-dim);transition:all .3s;}
+.online-card:hover .oc-arrow{color:var(--oa,var(--neon-cyan));transform:translateX(-4px);}
+
+/* NO RESULTS */
+.no-results{text-align:center;padding:50px;grid-column:1/-1;display:none;}
+.no-results.show{display:block;}
+.no-results h3{color:var(--text-dim);font-size:1.1rem;margin-top:10px;}
+
+/* TOAST */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--bg-card);border:1px solid var(--neon-green);border-radius:8px;padding:10px 24px;font-family:'Share Tech Mono',monospace;font-size:0.78rem;color:var(--neon-green);box-shadow:var(--glow-green);opacity:0;transition:all .4s;z-index:999;pointer-events:none;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+footer{border-top:1px solid var(--border);padding:28px 0;text-align:center;font-family:'Share Tech Mono',monospace;font-size:0.75rem;color:var(--text-dim);}
+footer span{color:var(--neon-red);}
+
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:var(--bg-deep);}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+::-webkit-scrollbar-thumb:hover{background:var(--neon-green);}
+
+@media(max-width:768px){
+  .stats-bar{grid-template-columns:repeat(2,1fr);}
+  .tools-grid,.online-grid{grid-template-columns:1fr;}
+  .nav-pills{display:none;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo">
+      <div class="logo-icon">🛡</div>
+      CyberArsenal | Prof. Ibrahim
+    </div>
+    <div class="nav-pills">
+      <button class="nav-pill active" data-s="tools" onclick="goTo('tools-sec')">🔧 أدوات كالي</button>
+      <button class="nav-pill" data-s="online" onclick="goTo('online-sec')">🌐 مواقع أمنية</button>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge">// KALI LINUX TOOLS + PHISHING + ANDROID EXPLOITATION //</div>
+    <h1>
+      <div style="color:var(--text-main)">مكتبة أدوات</div>
+      <div class="gr">اختبار الاختراق</div>
+    </h1>
+    <p>دليلك الشامل لأدوات الكالي لينكس مع خطوات التشغيل التفصيلية + أفضل المواقع الأمنية + أحدث منصات الـ Phishing والاختراق الأخلاقي + اختراق الأندرويد عبر USB/WiFi</p>
+
+    <div class="terminal">
+      <div class="t-bar">
+        <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+        <div class="t-title">root@kali:~#</div>
+      </div>
+      <div class="t-body">
+        <div><span class="t-pr">root@kali</span><span class="t-ou">:~# </span><span class="t-cm" id="tCmd"></span><span class="cursor"></span></div>
+        <div id="tOut" class="t-ou"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+
+  <div class="stats-bar">
+    <div class="stat-card"><div class="stat-num" id="toolsCount">8</div><div class="stat-label">🔧 أدوات كالي</div></div>
+    <div class="stat-card"><div class="stat-num">6</div><div class="stat-label">🌐 مواقع أمنية</div></div>
+    <div class="stat-card"><div class="stat-num" id="stepsCount">55</div><div class="stat-label">💻 خطوات موثقة</div></div>
+    <div class="stat-card"><div class="stat-num">📋</div><div class="stat-label">نسخ بضغطة واحدة</div></div>
+  </div>
+
+  <div class="search-section">
+    <div class="search-wrapper">
+      <input type="text" class="search-input" id="searchInput" placeholder="ابحث عن أداة أو موقع..." />
+      <div class="search-ico">🔍</div>
+    </div>
+    <div class="filters">
+      <button class="filter-btn active" data-cat="all">⚡ الكل</button>
+      <button class="filter-btn" data-cat="wordlist">🔑 قوائم كلمات</button>
+      <button class="filter-btn" data-cat="server">🌐 خادم ويب</button>
+      <button class="filter-btn" data-cat="metadata">🖼️ ميتاداتا</button>
+      <button class="filter-btn" data-cat="cracking">🔓 كسر كلمات</button>
+      <button class="filter-btn" data-cat="phishing">🎣 فيشنج & استغلال</button>
+      <button class="filter-btn" data-cat="android">📱 أندرويد (USB/WiFi)</button>
+      <button class="filter-btn" data-cat="online">🔗 مواقع أمنية</button>
+    </div>
+  </div>
+
+  <!-- KALI TOOLS -->
+  <div id="tools-sec">
+    <div class="sec-title">
+      <h2>🔧 أدوات كالي لينكس</h2>
+      <div class="sec-line"></div>
+      <div class="sec-badge" style="background:rgba(0,255,170,0.09);color:var(--neon-green);border:1px solid rgba(0,255,170,0.2)">KALI TOOLS</div>
+    </div>
+    <div class="tools-grid" id="toolsGrid">
+      <div class="no-results" id="noTools"><div style="font-size:2.5rem">🔍</div><h3>لا توجد نتائج</h3></div>
+    </div>
+  </div>
+
+  <!-- ONLINE TOOLS -->
+  <div id="online-sec">
+    <div class="sec-title">
+      <h2>🌐 مواقع أمنية مهمة</h2>
+      <div class="sec-line"></div>
+      <div class="sec-badge" style="background:rgba(0,229,255,0.09);color:var(--neon-cyan);border:1px solid rgba(0,229,255,0.2)">ONLINE TOOLS</div>
+    </div>
+    <div class="online-grid" id="onlineGrid">
+      <div class="no-results" id="noOnline"><div style="font-size:2.5rem">🔍</div><h3>لا توجد نتائج</h3></div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="container">
+    <p>⚡ CyberArsenal — للاستخدام التعليمي والأبحاث الأمنية المصرح بها فقط. استخدام الأدوات خارج إطار الاختبار الأخلاقي قد يعرضك للمساءلة القانونية. <span>♥</span></p>
+  </div>
+</footer>
+
+<div class="toast" id="toast">✓ تم نسخ الأمر!</div>
+
+<script>
+// ----------------------------- TOOLS (KALI + ANDROID) -----------------------------
+const tools = [
+  {
+    name:"CUPP",icon:"🔑",cat:"wordlist",catLabel:"قوائم كلمات مرور",
+    desc:"أداة لتوليد قوائم كلمات مرور مخصصة بناءً على معلومات الهدف الشخصية مثل الاسم وتاريخ الميلاد والهوايات والحيوانات الأليفة. مثالية للهجمات المستهدفة.",
+    difficulty:1,platforms:["Kali","Linux"],
+    accent:"#bf5fff",glow:"rgba(191,95,255,0.14)",iconBg:"rgba(191,95,255,0.1)",
+    steps:[
+      {cmd:"ls",note:"عرض محتويات المجلد الحالي"},
+      {cmd:"cd cupp",note:"الدخول لمجلد CUPP"},
+      {cmd:"python3 cupp.py -i",note:"تشغيل الأداة — ستطلب منك معلومات عن الهدف"},
+    ]
+  },
+  {
+    name:"Apache2 Web Server",icon:"🌐",cat:"server",catLabel:"خادم ويب",
+    desc:"تشغيل خادم ويب Apache2 على الكالي لاستضافة الصفحات والملفات محلياً. يُستخدم في سيناريوهات اختبار الاختراق لاستضافة الـ payloads والصفحات.",
+    difficulty:1,platforms:["Kali","Linux"],
+    accent:"#ff9900",glow:"rgba(255,153,0,0.14)",iconBg:"rgba(255,153,0,0.1)",
+    steps:[
+      {cmd:"service apache2 start",note:"تشغيل خادم Apache2"},
+      {cmd:"service apache2 status",note:"التحقق من أن الخادم يعمل بشكل صحيح"},
+      {cmd:"service apache2 stop",note:"إيقاف الخادم عند الانتهاء"},
+    ]
+  },
+  {
+    name:"ExifTool",icon:"🖼️",cat:"metadata",catLabel:"ميتاداتا صور",
+    desc:"أداة قراءة واستخراج البيانات الوصفية (Metadata) المخفية في الصور والملفات. تكشف معلومات دقيقة مثل موقع GPS والكاميرا والتاريخ والمحرر.",
+    difficulty:1,platforms:["Kali","Linux","Mac","Win"],
+    accent:"#00e5ff",glow:"rgba(0,229,255,0.14)",iconBg:"rgba(0,229,255,0.1)",
+    steps:[
+      {cmd:"exiftool image.jpg",note:"استخراج جميع البيانات الوصفية من الصورة"},
+      {cmd:"exiftool -GPS* image.jpg",note:"استخراج بيانات الموقع الجغرافي GPS فقط"},
+      {cmd:"exiftool -all= image.jpg",note:"حذف كل الميتاداتا من الصورة (تنظيف)"},
+    ]
+  },
+  {
+    name:"John the Ripper — ZIP",icon:"🔓",cat:"cracking",catLabel:"كسر كلمات مرور",
+    desc:"كسر كلمة مرور ملف ZIP محمي باستخدام John the Ripper. الطريقة تعمل بتحويل الهاش أولاً ثم مهاجمته بقاموس كلمات المرور الخاصة بك.",
+    difficulty:2,platforms:["Kali","Linux"],
+    accent:"#ff3860",glow:"rgba(255,56,96,0.14)",iconBg:"rgba(255,56,96,0.1)",
+    steps:[
+      {cmd:"zip2john protected.zip > zip_hash.txt",note:"استخراج الهاش من ملف ZIP المحمي"},
+      {cmd:"cat zip_hash.txt",note:"عرض الهاش المستخرج للتأكد من نجاح الخطوة"},
+      {cmd:"john --wordlist=my_passwords.txt zip_hash.txt",note:"مهاجمة الهاش بقاموس كلمات المرور"},
+      {cmd:"john --show zip_hash.txt",note:"عرض كلمة المرور إذا تم كسرها بنجاح"},
+    ]
+  },
+  {
+    name:"PyPhisher",icon:"🎣",cat:"phishing",catLabel:"فيشنج متقدم",
+    desc:"أداة احترافية لإنشاء صفحات مزورة (فيسبوك، انستجرام، جيميل، الخ) تعمل عبر ngrok/cloudflared. سهلة الاستخدام وتدعم أكثر من 54 موقعًا مع خيارات إعادة التوجيه.",
+    difficulty:2,platforms:["Kali","Linux"],
+    accent:"#ff007f",glow:"rgba(255,0,127,0.2)",iconBg:"rgba(255,0,127,0.12)",
+    steps:[
+      {cmd:"cd PyPhisher",note:"الدخول إلى مجلد الأداة (قم بتنزيلها أولاً من GitHub)"},
+      {cmd:"ls",note:"عرض الملفات للتأكد"},
+      {cmd:"python3 pyphisher.py",note:"تشغيل الأداة"},
+      {cmd:"n",note:"رفض التحديث إذا طلب (أو اضغط أي مفتاح)"},
+      {cmd:"اختيار رقم القالب (مثلاً 3 لفيسبوك)",note:"اختر الرقم المناسب من القائمة"},
+      {cmd:"[Enter]",note:"تأكيد اختيار القالب"},
+      {cmd:"أدخل رابط إعادة التوجيه",note:"مثل https://example.com (بعد إدخال الضحية بياناته ينتقل لهذا الرابط)"},
+      {cmd:"[Enter]",note:"بدء الخادم — ستحصل على رابط ngrok/cloudflared ترسله للضحية"},
+    ]
+  },
+  {
+    name:"Storm-Breaker",icon:"🌩️",cat:"phishing",catLabel:"كاميرا + صوت + موقع",
+    desc:"أداة اختراق متقدمة تسمح بالوصول إلى كاميرا الضحية، تسجيل الصوت، الحصول على الموقع الجغرافي، واستخراج المعلومات العامة. تعمل عبر خادم محلي وـCloudflared.",
+    difficulty:3,platforms:["Kali","Linux"],
+    accent:"#ff6600",glow:"rgba(255,102,0,0.18)",iconBg:"rgba(255,102,0,0.1)",
+    steps:[
+      {cmd:"cd ~/Storm-Breaker",note:"الانتقال لمجلد الأداة"},
+      {cmd:"source .venv/bin/activate",note:"تفعيل البيئة الافتراضية (Python virtual env)"},
+      {cmd:"python3 st.py",note:"تشغيل الخادم المحلي (سيستمع على المنفذ 2525)"},
+      {cmd:"(افتح محطة جديدة) cloudflared tunnel --url http://localhost:2525",note:"إنشاء رابط عام باستخدام Cloudflared (تأكد من تثبيته)"},
+      {cmd:"admin / admin",note:"قم بزيارة الرابط العام وأدخل admin:admin للدخول إلى لوحة التحكم"},
+      {cmd:"انسخ الرابط المُنشأ (مثل https://xxx.trycloudflare.com)",note:"أرسله للضحية — بعد الدخول سترى بياناته لحظيًا"},
+      {cmd:"النتائج تُحفظ داخل مجلد Storm-Breaker",note:"يمكنك متابعة الجلسات وتشغيل الكاميرا/الصوت من الواجهة"},
+    ]
+  },
+  {
+    name:"MaxPhisher",icon:"🕵️",cat:"phishing",catLabel:"هجوم متكامل",
+    desc:"أداة هجينة تجمع بين الفيشنج العادي واستغلال الكاميرا والميكروفون. تدعم العديد من المنصات: فيسبوك، واتساب، تويتر، انستجرام، وتحتوي على وحدات إضافية.",
+    difficulty:2,platforms:["Kali","Linux"],
+    accent:"#aa00ff",glow:"rgba(170,0,255,0.18)",iconBg:"rgba(170,0,255,0.1)",
+    steps:[
+      {cmd:"cd maxphisher",note:"الدخول لمجلد الأداة (يجب استنساخها من GitHub)"},
+      {cmd:"sudo python3 maxphisher.py",note:"تشغيل الأداة بصلاحيات الجذر (يحتاج إلى مكتبات معينة)"},
+      {cmd:"اختر الرقم المناسب للخدمة (فيسبوك، كاميرا، إلخ)",note:"اتبع التعليمات التفاعلية"},
+      {cmd:"انتظر حتى يتم إنشاء الرابط عبر Cloudflared/Localhost",note:"ستحصل على رابط عام"},
+      {cmd:"أرسل الرابط للهدف",note:"عند فتحه سيتم تسجيل الدخول وأيضًا طلب صلاحيات الكاميرا/الميكروفون إذا اخترت الوحدة المتقدمة"},
+      {cmd:"النتائج تعرض في الطرفية وتُحفظ في ملفات",note:"يمكن مشاهدتها من مجلد logs"},
+    ]
+  },
+  // NEW TOOL : PhoneSploit-Pro
+  {
+    name:"PhoneSploit-Pro",icon:"📱",cat:"android",catLabel:"اختراق أندرويد عبر USB/WiFi",
+    desc:"أداة قوية لاختراق أجهزة الأندرويد عن طريق الاتصال عبر USB ثم تحويله إلى WiFi للتحكم الكامل: شاشة، ملفات، تثبيت APK، بايلود، تسجيل فيديو، سكرين شوت، تشغيل تطبيقات، وأكثر.",
+    difficulty:3,platforms:["Kali","Linux"],
+    accent:"#44ff44",glow:"rgba(68,255,68,0.2)",iconBg:"rgba(68,255,68,0.1)",
+    steps:[
+      {cmd:"وصل الهاتف باللاب توب عبر USB",note:"فعّل 'تصحيح أخطاء USB' من إعدادات المطورين (إن كانت مفعلة قم بإلغاء التفعيل ثم إعادة تفعيلها)"},
+      {cmd:"adb devices",note:"تأكد من ظهور الجهاز في القائمة"},
+      {cmd:"adb tcpip 5555",note:"فتح منفذ TCP/IP على الهاتف"},
+      {cmd:"adb connect 192.168.1.10:5555",note:"استخدم IP الهدف الصحيح (تعرف عليه من الراوتر أو من جهاز الضحية نفسه)"},
+      {cmd:"cd PhoneSploit-Pro",note:"الدخول إلى مجلد الأداة (يجب تحميلها أولاً)"},
+      {cmd:"source .venv/bin/activate",note:"تفعيل البيئة الافتراضية"},
+      {cmd:"python3 phonesploitpro.py",note:"تشغيل الأداة الرئيسية"},
+      {cmd:"اختيار 1",note:"لإدخال IP الجهاز المستهدف على الشبكة (اكتب الIP ثم Enter)"},
+      {cmd:"اختيار 2 (اختياري)",note:"لتحديد الجهاز إذا كان هناك أكثر من جهاز"},
+      {cmd:"اختيار 5",note:"للاتصال والتحكم بالشاشة (Screen Control)"},
+      {cmd:"اضغط 1",note:"لعرض أعلى جودة للشاشة (قرار عالي)"},
+      {cmd:"اضغط 6",note:"لأخذ سكرين شوت من جهاز الهدف"},
+      {cmd:"اضغط 7 ثم اكتب 5",note:"لتسجيل فيديو لمدة 5 ثوانٍ (يمكنك تغيير المدة)"},
+      {cmd:"اضغط 8",note:"لتحميل كل ملفات الجهاز (نسخ احتياطي)"},
+      {cmd:"اضغط 9",note:"لإرسال ملف أو مجلد إلى الأندرويد (اختر المسار)"},
+      {cmd:"اضغط 10 ثم اختار 1",note:"لعرض قائمة التطبيقات واختيار تطبيق لتشغيله"},
+      {cmd:"اضغط 11",note:"لتثبيت ملف APK (عادي أو خبيث) على الجهاز المستهدف"},
+      {cmd:"اضغط 12",note:"لإزالة (مسح) تطبيق معين"},
+      {cmd:"اضغط 13 ثم 2",note:"لعرض جميع التطبيقات المثبتة على الجهاز"},
+      {cmd:"اضغط 14",note:"لفتح Terminal على الأندرويد (تنفيذ أوامر مباشرة)"},
+      {cmd:"اضغط 15",note:"لإنشاء بايلود APK (مثل Metasploit) وتثبيته تلقائياً على الجهاز المستهدف"},
+    ]
+  },
+];
+
+// update counts dynamically
+document.getElementById('toolsCount').innerText = tools.length;
+const totalSteps = tools.reduce((sum, t) => sum + t.steps.length, 0);
+document.getElementById('stepsCount').innerText = totalSteps;
+
+// Online tools (unchanged)
+const onlineTools = [
+  { name:"URLScan.io",icon:"🔗",url:"https://urlscan.io/", desc:"فحص الروابط المشبوهة والخبيثة. يحلل الموقع ويكشف المحتوى الضار والـ scripts الخارجية والاتصالات المشبوهة بتقرير مفصل.", tag:"فحص روابط",accent:"#00e5ff",glow:"rgba(0,229,255,0.12)",iconBg:"rgba(0,229,255,0.1)",tagColor:"#00e5ff" },
+  { name:"Any.run",icon:"🧪",url:"https://any.run/", desc:"فحص الملفات الملغمة في بيئة Sandbox معزولة تحاكي ويندوز حقيقي. تراقب سلوك الملف بشكل تفاعلي ومباشر وتكشف اتصالاته.", tag:"Sandbox تحليل",accent:"#ff9900",glow:"rgba(255,153,0,0.12)",iconBg:"rgba(255,153,0,0.1)",tagColor:"#ff9900" },
+  { name:"VirusTotal",icon:"🛡️",url:"https://www.virustotal.com/gui/home/upload", desc:"فحص الملفات والروابط بأكثر من 70 محرك أنتي فيروس دفعة واحدة. الأشهر والأدق في الكشف عن البرمجيات الخبيثة عالمياً.", tag:"فحص ملفات & روابط",accent:"#00ffaa",glow:"rgba(0,255,170,0.12)",iconBg:"rgba(0,255,170,0.1)",tagColor:"#00ffaa" },
+  { name:"HaveIBeenPwned",icon:"📧",url:"https://haveibeenpwned.com/", desc:"فحص إذا كان إيميل معين ضمن تسريبات بيانات معروفة. يُظهر اسم التسريب وتاريخه ونوع البيانات المسربة (إيميل، باسورد، إلخ).", tag:"فحص تسريبات",accent:"#ff3860",glow:"rgba(255,56,96,0.12)",iconBg:"rgba(255,56,96,0.1)",tagColor:"#ff3860" },
+  { name:"WhatsMyDNS — Domain Age",icon:"📅",url:"https://www.whatsmydns.net/domain-age", desc:"معرفة متى تم إنشاء أي موقع إلكتروني (عمر الدومين). مفيد لكشف المواقع حديثة الإنشاء التي قد تكون مواقع مزيفة أو احتيالية.", tag:"عمر النطاق",accent:"#bf5fff",glow:"rgba(191,95,255,0.12)",iconBg:"rgba(191,95,255,0.1)",tagColor:"#bf5fff" },
+  { name:"2h.ae",icon:"✂️",url:"https://2h.ae/", desc:"موقع عربي لاختصار الروابط الطويلة. يُستخدم في اختبار الاختراق لإخفاء روابط الفحص وجعلها أقصر وأسهل للمشاركة.", tag:"اختصار روابط",accent:"#00bfff",glow:"rgba(0,191,255,0.12)",iconBg:"rgba(0,191,255,0.1)",tagColor:"#00bfff" }
+];
+
+function renderCard(t,idx){
+  const dots=[1,2,3].map(i=>`<div class="diff-dot${i<=t.difficulty?' active':''}"></div>`).join('');
+  const plats=t.platforms.map(p=>`<span class="platform-badge">${p}</span>`).join('');
+  const steps=t.steps.map((s,i)=>`
+    <div class="step-item" onclick="copyText('${s.cmd.replace(/'/g,"\\'")}')">
+      <div class="step-num">${String(i+1).padStart(2,'0')}</div>
+      <div style="flex:1">
+        <span class="step-cmd">${s.cmd}</span>
+        <span class="step-note">${s.note}</span>
+      </div>
+      <span class="copy-ico">📋</span>
+    </div>`).join('');
+  return `
+    <div class="tool-card" data-cat="${t.cat}" data-n="${t.name.toLowerCase()}" data-d="${t.desc}"
+      style="--ca:${t.accent};--cs:${t.glow};animation-delay:${idx*80}ms">
+      <div class="card-header">
+        <div class="tool-icon" style="background:${t.iconBg}">${t.icon}</div>
+        <div>
+          <div class="tool-name">${t.name}</div>
+          <div class="tool-cat" style="background:${t.accent}22;color:${t.accent}">${t.catLabel}</div>
+        </div>
+      </div>
+      <p class="tool-desc">${t.desc}</p>
+      <div class="steps-lbl">// خطوات التشغيل — اضغط للنسخ</div>
+      <div class="steps-list">${steps}</div>
+      <div class="card-footer">
+        <div class="difficulty"><span style="margin-left:6px">صعوبة:</span>${dots}</div>
+        <div class="platform-badges">${plats}</div>
+      </div>
+    </div>`;
+}
+
+function renderOnline(o,idx){
+  return `
+    <div class="online-card" data-cat="online" data-n="${o.name.toLowerCase()}" data-d="${o.desc}"
+      onclick="window.open('${o.url}','_blank')"
+      style="--oa:${o.accent};--og:${o.glow};animation-delay:${idx*70}ms">
+      <div class="oc-header">
+        <div class="oc-icon" style="background:${o.iconBg}">${o.icon}</div>
+        <div>
+          <div class="oc-name">${o.name}</div>
+          <div class="oc-url" style="color:${o.accent}">${o.url.replace('https://','')}</div>
+        </div>
+      </div>
+      <div class="oc-desc">${o.desc}</div>
+      <div class="oc-footer">
+        <div class="oc-tag" style="background:${o.accent}20;color:${o.tagColor};border:1px solid ${o.accent}40">${o.tag}</div>
+        <span class="oc-arrow">↗</span>
+      </div>
+    </div>`;
+}
+
+function copyText(cmd){
+  navigator.clipboard.writeText(cmd).catch(()=>{});
+  const t=document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2000);
+}
+
+let cat='all',srch='';
+function render(){
+  const tg=document.getElementById('toolsGrid');
+  const og=document.getElementById('onlineGrid');
+  const s=srch.toLowerCase();
+  tg.querySelectorAll('.tool-card').forEach(c=>c.remove());
+  og.querySelectorAll('.online-card').forEach(c=>c.remove());
+
+  const showTools=(cat==='all'||cat!=='online');
+  const showOnline=(cat==='all'||cat==='online');
+
+  const ft=tools.filter(t=>{
+    const co=(cat==='all' || t.cat===cat);
+    const so=!s || (t.name.toLowerCase().includes(s) || t.desc.includes(s) || t.catLabel.includes(s));
+    return co && so && (cat!=='online' || showTools);
+  });
+  document.getElementById('noTools').className='no-results'+(ft.length===0 && showTools ? ' show' : '');
+  if(showTools) ft.forEach((t,i)=>tg.insertAdjacentHTML('beforeend',renderCard(t,i)));
+  document.getElementById('tools-sec').style.display=showTools ? 'block' : 'none';
+
+  const fo=onlineTools.filter(o=>{
+    const co=(cat==='all' || cat==='online');
+    const so=!s || (o.name.toLowerCase().includes(s) || o.desc.includes(s) || o.tag.includes(s));
+    return co && so;
+  });
+  document.getElementById('noOnline').className='no-results'+(fo.length===0 && showOnline ? ' show' : '');
+  if(showOnline) fo.forEach((o,i)=>og.insertAdjacentHTML('beforeend',renderOnline(o,i)));
+  document.getElementById('online-sec').style.display=showOnline ? 'block' : 'none';
+}
+
+document.querySelectorAll('.filter-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.filter-btn').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');cat=b.dataset.cat;render();
+  });
+});
+document.getElementById('searchInput').addEventListener('input',e=>{srch=e.target.value;render();});
+
+function goTo(id){document.getElementById(id)?.scrollIntoView({behavior:'smooth'});}
+
+// TERMINAL animation (updated to show PhoneSploit)
+const tls=[
+  {c:"python3 pyphisher.py",o:"[+] Starting PyPhisher...   [*] Tunnel: https://xxxx.ngrok.io"},
+  {c:"cd ~/Storm-Breaker && source .venv/bin/activate",o:"[*] Server started at http://localhost:2525"},
+  {c:"cloudflared tunnel --url http://localhost:2525",o:"[+] Your tunnel: https://stormy.trycloudflare.com"},
+  {c:"sudo python3 maxphisher.py",o:"[+] MaxPhisher interactive menu loaded."},
+  {c:"adb tcpip 5555 && adb connect 192.168.1.10:5555",o:"[+] Connected to 192.168.1.10:5555"},
+  {c:"python3 phonesploitpro.py",o:"[+] PhoneSploit-Pro ready — Choose option 5 for screen control"},
+];
+let li=0;
+function type(){
+  const ec=document.getElementById('tCmd');
+  const eo=document.getElementById('tOut');
+  const {c,o}=tls[li%tls.length];
+  ec.textContent='';eo.textContent='';
+  let i=0;
+  const iv=setInterval(()=>{
+    ec.textContent+=c[i++];
+    if(i>=c.length){
+      clearInterval(iv);
+      setTimeout(()=>{eo.textContent=o;},380);
+      setTimeout(()=>{li++;type();},3400);
+    }
+  },52);
+}
+type();
+render();
+</script>
+</body>
+</html>
