@@ -29,7 +29,6 @@ nav{position:sticky;top:0;z-index:100;background:rgba(3,11,15,0.94);backdrop-fil
 .nav-pills{display:flex;gap:8px;}
 .nav-pill{padding:6px 16px;border:1px solid var(--border);border-radius:100px;font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:var(--text-dim);cursor:pointer;background:transparent;transition:all .3s;}
 .nav-pill:hover,.nav-pill.active{background:var(--neon-green);color:#030b0f;border-color:var(--neon-green);}
-.nav-pill[data-s="online"].active{background:var(--neon-cyan);border-color:var(--neon-cyan);}
 
 /* HERO */
 .hero{padding:72px 0 52px;text-align:center;}
@@ -74,7 +73,6 @@ nav{position:sticky;top:0;z-index:100;background:rgba(3,11,15,0.94);backdrop-fil
 .filter-btn[data-cat="cracking"].active{background:linear-gradient(135deg,#ff3860,#bf00ff);}
 .filter-btn[data-cat="phishing"].active{background:linear-gradient(135deg,#ff007f,#a00050);}
 .filter-btn[data-cat="android"].active{background:linear-gradient(135deg,#44ff44,#00aa44);}
-.filter-btn[data-cat="online"].active{background:linear-gradient(135deg,#00ffcc,#00bfff);}
 
 /* SECTION TITLE */
 .sec-title{display:flex;align-items:center;gap:14px;margin-bottom:26px;margin-top:52px;}
@@ -116,20 +114,6 @@ nav{position:sticky;top:0;z-index:100;background:rgba(3,11,15,0.94);backdrop-fil
 .platform-badges{display:flex;gap:5px;}
 .platform-badge{padding:3px 8px;border-radius:4px;font-size:0.62rem;font-family:'Share Tech Mono',monospace;background:rgba(255,255,255,0.05);color:var(--text-dim);border:1px solid rgba(255,255,255,0.07);}
 
-/* ONLINE GRID */
-.online-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px;margin-bottom:70px;}
-.online-card{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:20px;transition:all .4s cubic-bezier(.23,1,.32,1);animation:fadeUp .5s ease forwards;opacity:0;transform:translateY(18px);cursor:pointer;}
-.online-card:hover{transform:translateY(-5px) scale(1.01);border-color:var(--oa,var(--neon-cyan));box-shadow:0 16px 50px rgba(0,0,0,0.4),0 0 25px var(--og,rgba(0,229,255,0.12));}
-.oc-header{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
-.oc-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;}
-.oc-name{font-size:1.05rem;font-weight:700;color:white;font-family:'Rajdhani',sans-serif;letter-spacing:1px;}
-.oc-url{font-size:0.63rem;font-family:'Share Tech Mono',monospace;margin-top:2px;}
-.oc-desc{font-size:0.83rem;color:var(--text-dim);line-height:1.72;margin-bottom:14px;}
-.oc-footer{display:flex;align-items:center;justify-content:space-between;}
-.oc-tag{display:inline-block;padding:4px 12px;border-radius:100px;font-size:0.67rem;font-family:'Share Tech Mono',monospace;font-weight:600;letter-spacing:1px;}
-.oc-arrow{font-size:1rem;color:var(--text-dim);transition:all .3s;}
-.online-card:hover .oc-arrow{color:var(--oa,var(--neon-cyan));transform:translateX(-4px);}
-
 /* NO RESULTS */
 .no-results{text-align:center;padding:50px;grid-column:1/-1;display:none;}
 .no-results.show{display:block;}
@@ -149,8 +133,7 @@ footer span{color:var(--neon-red);}
 
 @media(max-width:768px){
   .stats-bar{grid-template-columns:repeat(2,1fr);}
-  .tools-grid,.online-grid{grid-template-columns:1fr;}
-  .nav-pills{display:none;}
+  .tools-grid{grid-template-columns:1fr;}
 }
 </style>
 </head>
@@ -164,7 +147,6 @@ footer span{color:var(--neon-red);}
     </div>
     <div class="nav-pills">
       <button class="nav-pill active" data-s="tools" onclick="goTo('tools-sec')">🔧 أدوات كالي</button>
-      <button class="nav-pill" data-s="online" onclick="goTo('online-sec')">🌐 مواقع أمنية</button>
     </div>
   </div>
 </nav>
@@ -176,7 +158,7 @@ footer span{color:var(--neon-red);}
       <div style="color:var(--text-main)">مكتبة أدوات</div>
       <div class="gr">اختبار الاختراق</div>
     </h1>
-    <p>دليلك الشامل لأدوات الكالي لينكس مع خطوات التشغيل التفصيلية + أفضل المواقع الأمنية + أحدث منصات الـ Phishing والاختراق الأخلاقي + اختراق الأندرويد عبر USB/WiFi</p>
+    <p>دليلك الشامل لأدوات الكالي لينكس مع خطوات التشغيل التفصيلية + منصات الـ Phishing والاستغلال الأخلاقي + اختراق الأندرويد عبر USB/WiFi</p>
 
     <div class="terminal">
       <div class="t-bar">
@@ -195,14 +177,14 @@ footer span{color:var(--neon-red);}
 
   <div class="stats-bar">
     <div class="stat-card"><div class="stat-num" id="toolsCount">8</div><div class="stat-label">🔧 أدوات كالي</div></div>
-    <div class="stat-card"><div class="stat-num">6</div><div class="stat-label">🌐 مواقع أمنية</div></div>
+    <div class="stat-card"><div class="stat-num">0</div><div class="stat-label">🌐 مواقع أمنية</div></div>
     <div class="stat-card"><div class="stat-num" id="stepsCount">55</div><div class="stat-label">💻 خطوات موثقة</div></div>
     <div class="stat-card"><div class="stat-num">📋</div><div class="stat-label">نسخ بضغطة واحدة</div></div>
   </div>
 
   <div class="search-section">
     <div class="search-wrapper">
-      <input type="text" class="search-input" id="searchInput" placeholder="ابحث عن أداة أو موقع..." />
+      <input type="text" class="search-input" id="searchInput" placeholder="ابحث عن أداة..." />
       <div class="search-ico">🔍</div>
     </div>
     <div class="filters">
@@ -213,7 +195,6 @@ footer span{color:var(--neon-red);}
       <button class="filter-btn" data-cat="cracking">🔓 كسر كلمات</button>
       <button class="filter-btn" data-cat="phishing">🎣 فيشنج & استغلال</button>
       <button class="filter-btn" data-cat="android">📱 أندرويد (USB/WiFi)</button>
-      <button class="filter-btn" data-cat="online">🔗 مواقع أمنية</button>
     </div>
   </div>
 
@@ -226,18 +207,6 @@ footer span{color:var(--neon-red);}
     </div>
     <div class="tools-grid" id="toolsGrid">
       <div class="no-results" id="noTools"><div style="font-size:2.5rem">🔍</div><h3>لا توجد نتائج</h3></div>
-    </div>
-  </div>
-
-  <!-- ONLINE TOOLS -->
-  <div id="online-sec">
-    <div class="sec-title">
-      <h2>🌐 مواقع أمنية مهمة</h2>
-      <div class="sec-line"></div>
-      <div class="sec-badge" style="background:rgba(0,229,255,0.09);color:var(--neon-cyan);border:1px solid rgba(0,229,255,0.2)">ONLINE TOOLS</div>
-    </div>
-    <div class="online-grid" id="onlineGrid">
-      <div class="no-results" id="noOnline"><div style="font-size:2.5rem">🔍</div><h3>لا توجد نتائج</h3></div>
     </div>
   </div>
 
@@ -344,7 +313,6 @@ const tools = [
       {cmd:"النتائج تعرض في الطرفية وتُحفظ في ملفات",note:"يمكن مشاهدتها من مجلد logs"},
     ]
   },
-  // NEW TOOL : PhoneSploit-Pro
   {
     name:"PhoneSploit-Pro",icon:"📱",cat:"android",catLabel:"اختراق أندرويد عبر USB/WiFi",
     desc:"أداة قوية لاختراق أجهزة الأندرويد عن طريق الاتصال عبر USB ثم تحويله إلى WiFi للتحكم الكامل: شاشة، ملفات، تثبيت APK، بايلود، تسجيل فيديو، سكرين شوت، تشغيل تطبيقات، وأكثر.",
@@ -376,20 +344,9 @@ const tools = [
   },
 ];
 
-// update counts dynamically
 document.getElementById('toolsCount').innerText = tools.length;
 const totalSteps = tools.reduce((sum, t) => sum + t.steps.length, 0);
 document.getElementById('stepsCount').innerText = totalSteps;
-
-// Online tools (unchanged)
-const onlineTools = [
-  { name:"URLScan.io",icon:"🔗",url:"https://urlscan.io/", desc:"فحص الروابط المشبوهة والخبيثة. يحلل الموقع ويكشف المحتوى الضار والـ scripts الخارجية والاتصالات المشبوهة بتقرير مفصل.", tag:"فحص روابط",accent:"#00e5ff",glow:"rgba(0,229,255,0.12)",iconBg:"rgba(0,229,255,0.1)",tagColor:"#00e5ff" },
-  { name:"Any.run",icon:"🧪",url:"https://any.run/", desc:"فحص الملفات الملغمة في بيئة Sandbox معزولة تحاكي ويندوز حقيقي. تراقب سلوك الملف بشكل تفاعلي ومباشر وتكشف اتصالاته.", tag:"Sandbox تحليل",accent:"#ff9900",glow:"rgba(255,153,0,0.12)",iconBg:"rgba(255,153,0,0.1)",tagColor:"#ff9900" },
-  { name:"VirusTotal",icon:"🛡️",url:"https://www.virustotal.com/gui/home/upload", desc:"فحص الملفات والروابط بأكثر من 70 محرك أنتي فيروس دفعة واحدة. الأشهر والأدق في الكشف عن البرمجيات الخبيثة عالمياً.", tag:"فحص ملفات & روابط",accent:"#00ffaa",glow:"rgba(0,255,170,0.12)",iconBg:"rgba(0,255,170,0.1)",tagColor:"#00ffaa" },
-  { name:"HaveIBeenPwned",icon:"📧",url:"https://haveibeenpwned.com/", desc:"فحص إذا كان إيميل معين ضمن تسريبات بيانات معروفة. يُظهر اسم التسريب وتاريخه ونوع البيانات المسربة (إيميل، باسورد، إلخ).", tag:"فحص تسريبات",accent:"#ff3860",glow:"rgba(255,56,96,0.12)",iconBg:"rgba(255,56,96,0.1)",tagColor:"#ff3860" },
-  { name:"WhatsMyDNS — Domain Age",icon:"📅",url:"https://www.whatsmydns.net/domain-age", desc:"معرفة متى تم إنشاء أي موقع إلكتروني (عمر الدومين). مفيد لكشف المواقع حديثة الإنشاء التي قد تكون مواقع مزيفة أو احتيالية.", tag:"عمر النطاق",accent:"#bf5fff",glow:"rgba(191,95,255,0.12)",iconBg:"rgba(191,95,255,0.1)",tagColor:"#bf5fff" },
-  { name:"2h.ae",icon:"✂️",url:"https://2h.ae/", desc:"موقع عربي لاختصار الروابط الطويلة. يُستخدم في اختبار الاختراق لإخفاء روابط الفحص وجعلها أقصر وأسهل للمشاركة.", tag:"اختصار روابط",accent:"#00bfff",glow:"rgba(0,191,255,0.12)",iconBg:"rgba(0,191,255,0.1)",tagColor:"#00bfff" }
-];
 
 function renderCard(t,idx){
   const dots=[1,2,3].map(i=>`<div class="diff-dot${i<=t.difficulty?' active':''}"></div>`).join('');
@@ -423,26 +380,6 @@ function renderCard(t,idx){
     </div>`;
 }
 
-function renderOnline(o,idx){
-  return `
-    <div class="online-card" data-cat="online" data-n="${o.name.toLowerCase()}" data-d="${o.desc}"
-      onclick="window.open('${o.url}','_blank')"
-      style="--oa:${o.accent};--og:${o.glow};animation-delay:${idx*70}ms">
-      <div class="oc-header">
-        <div class="oc-icon" style="background:${o.iconBg}">${o.icon}</div>
-        <div>
-          <div class="oc-name">${o.name}</div>
-          <div class="oc-url" style="color:${o.accent}">${o.url.replace('https://','')}</div>
-        </div>
-      </div>
-      <div class="oc-desc">${o.desc}</div>
-      <div class="oc-footer">
-        <div class="oc-tag" style="background:${o.accent}20;color:${o.tagColor};border:1px solid ${o.accent}40">${o.tag}</div>
-        <span class="oc-arrow">↗</span>
-      </div>
-    </div>`;
-}
-
 function copyText(cmd){
   navigator.clipboard.writeText(cmd).catch(()=>{});
   const t=document.getElementById('toast');
@@ -453,31 +390,16 @@ function copyText(cmd){
 let cat='all',srch='';
 function render(){
   const tg=document.getElementById('toolsGrid');
-  const og=document.getElementById('onlineGrid');
   const s=srch.toLowerCase();
   tg.querySelectorAll('.tool-card').forEach(c=>c.remove());
-  og.querySelectorAll('.online-card').forEach(c=>c.remove());
-
-  const showTools=(cat==='all'||cat!=='online');
-  const showOnline=(cat==='all'||cat==='online');
 
   const ft=tools.filter(t=>{
     const co=(cat==='all' || t.cat===cat);
     const so=!s || (t.name.toLowerCase().includes(s) || t.desc.includes(s) || t.catLabel.includes(s));
-    return co && so && (cat!=='online' || showTools);
-  });
-  document.getElementById('noTools').className='no-results'+(ft.length===0 && showTools ? ' show' : '');
-  if(showTools) ft.forEach((t,i)=>tg.insertAdjacentHTML('beforeend',renderCard(t,i)));
-  document.getElementById('tools-sec').style.display=showTools ? 'block' : 'none';
-
-  const fo=onlineTools.filter(o=>{
-    const co=(cat==='all' || cat==='online');
-    const so=!s || (o.name.toLowerCase().includes(s) || o.desc.includes(s) || o.tag.includes(s));
     return co && so;
   });
-  document.getElementById('noOnline').className='no-results'+(fo.length===0 && showOnline ? ' show' : '');
-  if(showOnline) fo.forEach((o,i)=>og.insertAdjacentHTML('beforeend',renderOnline(o,i)));
-  document.getElementById('online-sec').style.display=showOnline ? 'block' : 'none';
+  document.getElementById('noTools').className='no-results'+(ft.length===0 ? ' show' : '');
+  ft.forEach((t,i)=>tg.insertAdjacentHTML('beforeend',renderCard(t,i)));
 }
 
 document.querySelectorAll('.filter-btn').forEach(b=>{
@@ -490,7 +412,7 @@ document.getElementById('searchInput').addEventListener('input',e=>{srch=e.targe
 
 function goTo(id){document.getElementById(id)?.scrollIntoView({behavior:'smooth'});}
 
-// TERMINAL animation (updated to show PhoneSploit)
+// TERMINAL animation
 const tls=[
   {c:"python3 pyphisher.py",o:"[+] Starting PyPhisher...   [*] Tunnel: https://xxxx.ngrok.io"},
   {c:"cd ~/Storm-Breaker && source .venv/bin/activate",o:"[*] Server started at http://localhost:2525"},
